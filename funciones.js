@@ -17,11 +17,13 @@ function generarIDConcierto() {
     return id;
 }
 
-// Registrar Evento 
-function registrarEvento() {
+//Array para almacenar los conciertos
+const conciertos = [];
 
-    //Array para almacenar los conciertos
-    const conciertos = []; 
+// Registrar Evento 
+function registrarEvento(event) {
+
+    event.preventDefault();
 
     //.toUpperCase para convertir las letras a mayúsculas
     let evento = document.getElementById('evento').value.toUpperCase(),
@@ -29,9 +31,7 @@ function registrarEvento() {
         fecha = document.getElementById('fecha').value,
         aforo = document.getElementById('aforo').value,
         temporada = document.getElementById('temporada').value,
-        sala = document.getElementById('sala').value,
-        gastos = document.getElementById('gastos_g').value, 
-        cache = document.getElementById('cache').value;
+        sala = parseInt(document.getElementById('sala').value);
 
     // Creamos un objeto de tipo concierto
     const concierto = {
@@ -39,10 +39,12 @@ function registrarEvento() {
         evento, 
         artista,
         fecha,
+        aforo,
         temporada,
-        precio: calcularPrecio(cache, gastos, aforo),
+        precio: calcularPrecio(),
         sala
     };
+
     conciertos.push(concierto);
     agregarConcierto();
     console.log(conciertos);
@@ -76,7 +78,7 @@ function agregarConcierto() {
 }
 
 // Eliminar el concierto en función de su id
-function eliminarConcierto() {
+function eliminarConcierto(id) {
     //Se inicializa en -1, para indicar que aún no encontramos al concierto.
     let index = -1; 
 
@@ -88,7 +90,6 @@ function eliminarConcierto() {
             break;
         }
     }
-
     // El indice siempre será mayor a -1
     if (index > -1) {
         // Si encontramos su ubicación eliminaremos solo el concierto que esté en ese índice
@@ -98,10 +99,11 @@ function eliminarConcierto() {
     }
 }
 
+function calcularPrecio() {
+    let gastos = document.getElementById('gastos_g').value, 
+        aforo = document.getElementById('aforo').value,
+        cache = document.getElementById('cache').value;
 
-
-
-function calcularPrecio(cache, gastos, aforo) {
     document.getElementById('sala-error').innerHTML = ""; 
     capMax = 0;
 
@@ -137,6 +139,7 @@ function calcularPrecio(cache, gastos, aforo) {
                 "2" + "\n" +
                 "3" + "\n" +
                 "4" + "\n");
+            break;
     }
 
     // Comprobar que el número de asistentes se ajusta a la sala: 

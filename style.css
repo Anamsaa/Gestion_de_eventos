@@ -97,3 +97,19 @@ main {
     background-color: #F9F9F9;
     height: 24px;
 }
+
+.eliminar {
+    margin-top: 10px; 
+    background-color: rgb(229, 67, 30);
+    color: white;
+    font-weight: bold;
+    border-style: none;
+    height: 30px;
+    padding: 3px;
+    border-radius: 0.2rem;
+}
+
+.agenda {
+
+    margin-top: 20px;
+}

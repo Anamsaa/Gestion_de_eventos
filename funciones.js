@@ -1,64 +1,4 @@
-const conciertos = []; 
-
-// Registrar Evento 
-function registrarEvento() {
-
-    let evento = document.getElementById('evento').value,
-        artista = document.getElementById('artista').value,
-        fecha = document.getElementById('fecha').value,
-        aforo = document.getElementById('aforo').value,
-        temporada = document.getElementById('temporada').value,
-        sala = document.getElementById('sala').value,
-        precio = document.getElementById('precio').value;
-        gastos = document.getElementById('gastos_g').value, 
-        cache = document.getElementById('cache').value;
-
-    // Creamos un objeto de tipo concierto
-    const concierto = {
-        id: generarIDconcierto(),
-        evento, 
-        artista, 
-        fecha,
-        precio: calcularPrecio(cache, gastos, aforo),
-        sala
-    };
-    conciertos.push(concierto);
-    agregarConcierto();
-    document.getElementById("registro-form").reset();
-}
-
-function agregarConcierto() {
-    const listaConciertos = document.getElementById("lista-conciertos");
-    listaConciertos.innerHTML = ""; 
-
-
-    // Hacemos un for-each del array de conciertos
-    conciertos.forEach(concierto => {
-        // Crear un elemento div, donde se almacena la info. por cada concierto registrado que tenga el array
-        let conciertoCont = document.createElement("div");
-        conciertoCont.classList.add("concierto_reg");
-
-        conciertoCont.innerHTML = `
-            <p>Evento: ${concierto.evento}</p>
-            <p>Artista: ${concierto.artista}</p>
-            <p>Fecha: ${concierto.fecha}</p>
-            <p>Aforo: ${concierto.aforo}</p>
-            <p>Precio: ${concierto.precio}</p>
-            <p>ID: ${concierto.id}</p>
-        `; 
-
-        listaConciertos.appendChild(conciertoCont);
-    });
-}
-
-
-function eliminarConcierto() {
-
-}
-
-
 // Generar ID de concierto
-
 function generarIDConcierto() {
 
     let aforo = document.getElementById('aforo').value,
@@ -77,8 +17,92 @@ function generarIDConcierto() {
     return id;
 }
 
+// Registrar Evento 
+function registrarEvento() {
+
+    //Array para almacenar los conciertos
+    const conciertos = []; 
+
+    //.toUpperCase para convertir las letras a mayúsculas
+    let evento = document.getElementById('evento').value.toUpperCase(),
+        artista = document.getElementById('artista').value,
+        fecha = document.getElementById('fecha').value,
+        aforo = document.getElementById('aforo').value,
+        temporada = document.getElementById('temporada').value,
+        sala = document.getElementById('sala').value,
+        gastos = document.getElementById('gastos_g').value, 
+        cache = document.getElementById('cache').value;
+
+    // Creamos un objeto de tipo concierto
+    const concierto = {
+        id: generarIDConcierto(),
+        evento, 
+        artista,
+        fecha,
+        temporada,
+        precio: calcularPrecio(cache, gastos, aforo),
+        sala
+    };
+    conciertos.push(concierto);
+    agregarConcierto();
+    console.log(conciertos);
+    document.getElementById("registro-form").reset();
+}
+
+function agregarConcierto() {
+    const listaConciertos = document.getElementById("lista-conciertos");
+    listaConciertos.innerHTML = ""; 
+
+
+    // Hacemos un for-each del array de conciertos
+    conciertos.forEach(concierto => {
+        // Crear un elemento div, donde se almacena la info. por cada concierto registrado que tenga el array
+        let conciertoCont = document.createElement("div");
+        conciertoCont.classList.add("concierto_reg");
+
+        conciertoCont.innerHTML = `
+            <p>Evento: ${concierto.evento}</p>
+            <p>Artista: ${concierto.artista}</p>
+            <p>Fecha: ${concierto.fecha}</p>
+            <p>Fecha: ${concierto.temporada}</p>
+            <p>Aforo: ${concierto.aforo}</p>
+            <p>Precio: ${concierto.precio}</p>
+            <p>ID: ${concierto.id}</p>
+            <button class="eliminar" onclick="eliminarConcierto(${concierto.id})">Eliminar</button>
+        `; 
+
+        listaConciertos.appendChild(conciertoCont);
+    });
+}
+
+// Eliminar el concierto en función de su id
+function eliminarConcierto() {
+    //Se inicializa en -1, para indicar que aún no encontramos al concierto.
+    let index = -1; 
+
+    for (let i = 0; i < conciertos.length; i++){
+        // Buscamos en el array de concierto el que coincida con el ID
+        if (conciertos[i].id === id){
+            //Guardamos el índice del concierto
+            index = i;
+            break;
+        }
+    }
+
+    // El indice siempre será mayor a -1
+    if (index > -1) {
+        // Si encontramos su ubicación eliminaremos solo el concierto que esté en ese índice
+        conciertos.splice(index, 1);
+        //Actualizamos los próximos conciertos llamando a la función de agregar concierto
+        agregarConcierto();
+    }
+}
+
+
+
+
 function calcularPrecio(cache, gastos, aforo) {
-    
+    document.getElementById('sala-error').innerHTML = ""; 
     capMax = 0;
 
     //El precio será evaluado en función de la capacidad de cada sala. 
@@ -86,25 +110,25 @@ function calcularPrecio(cache, gastos, aforo) {
         case 1: 
             capMax = 250; 
             if (aforo > capMax){
-                alert("La sala 1 tiene una capacidad máxima de hasta 250 invitados");
+                document.getElementById('sala-error').innerHTML = "La sala 1 tiene una capacidad máxima de hasta 250 personas";
             }
             break; 
         case 2: 
             capMax = 300; 
             if (aforo > capMax){
-                alert("La sala 2 tiene una capacidad máxima de hasta 300 invitados");
+                document.getElementById('sala-error').innerHTML = "La sala 2 tiene una capacidad máxima de hasta 300 personas";
             }
             break; 
         case 3: 
             capMax = 400; 
             if (aforo > capMax){
-                alert("La sala 3 tiene una capacidad máxima de hasta 400 invitados");
+                document.getElementById('sala-error').innerHTML = "La sala 3 tiene una capacidad máxima de hasta 400 personas";
             }
             break; 
         case 4: 
             capMax = 500;
             if (aforo > capMax){
-                alert("La sala 4 tiene una capacidad máxima de hasta 500 invitados");
+                document.getElementById('sala-error').innerHTML = "La sala 4 tiene una capacidad máxima de hasta 500 personas";
             }
             break; 
         default : 
@@ -115,34 +139,34 @@ function calcularPrecio(cache, gastos, aforo) {
                 "4" + "\n");
     }
 
-    //Comprobar que el número de asistentes se ajusta a la sala: 
+    // Comprobar que el número de asistentes se ajusta a la sala: 
     let precioBase = (parseFloat(cache) + parseFloat(gastos)) / aforo;
-    //Redondear el precio base 
+    // Redondear el precio base 
     return Math.round(precioBase * 100)/100; 
 }
 
 
 function recordarEvento() {
-    
-
-}
-
-
-function darEstilo(){
-
-    let nombreEvento = document.getElementById('evento'); 
 
 
 }
 
 function validarTickets() {
+    let tickets = parseInt(document.getElementById('tickets').value),
+        aforo = parseInt(document.getElementById('aforo').value);
 
+    document.getElementById('tickets-error').innerHTML = ""; 
+
+    let esValido = true;
+       
+    if (tickets > aforo) {
+        document.getElementById('tickets-error').innerHTML = "El número de tickets no puede exceder el aforo permitido";
+        esValido = false;
+    }
 }
 
 
 // Funciones de Manu 
-
-
 function enviarFormulario() {
     
     const botonEnviarFormulario = document.getElementById("registrar");

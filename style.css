@@ -22,12 +22,20 @@
     align-self: center;
 }
 
-
-.buscador{
+.busqueda{
+    display: flex;
+    justify-content: space-between;
     width: 300px;
     height: 30px;
     background-color: #F9F9F9;
     align-self: center;
+}
+
+.fa-solid {
+    font-size: 20px; 
+    color: rgb(3, 6, 10);
+    align-self: center; 
+    padding: 6px;
 }
 
 .formulario {
@@ -37,16 +45,11 @@
 .contenedor_registro {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: repeat(6, 1fr);
     grid-gap: 10px;
     padding: 20px;
     box-sizing: border-box;
 }
-
-.registrar {
-    padding: 20px;
-}
-
 
 input {
     width: 200px;
@@ -58,66 +61,16 @@ input {
     outline: none;
 }
 
-.registrar input {
-    width: 160px;
-    height: 40px;
-    background-color: orange;
-    border: 0;
-    font-weight: bold;
-    border-radius: 1rem;
-}
-
-#boton-calcular {
-    align-self: flex-end;
-    justify-self: flex-start;
-    grid-row: 3 / 4 ;
-}
-
-#calcular {
-    background-color: orange;
-    border: 0;
-    font-weight: bold;
-    border-radius: 0.2rem;
-}
-
-.precio {
-    width: 100%
-}
-
-.precio_formulario{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-gap: 10px;
-    padding: 20px;
-    width: 100%;
-}
-
-.contenedor_precio_final {
-    background-color: white;
-    height: 2rem;
-    margin-top: 20px;
-    width: 100%;
-    padding: 2px;
-    align-self: center;
-}
 
 .titulo-precio {
     display: inline-block;
+    align-self: center;
     grid-column: 1 / 4;
-}
-
-.precio {
-    display: flex; 
-}
-
-
-div #importe {
-    grid-row: 3 / 4; 
 }
 
 main {
     display: flex;
+    width: 100%;
 }
 
 
@@ -125,4 +78,22 @@ main {
     width: 50%;
     padding: 20px;
     background-color: rgb(200, 199, 199);
+}
+
+.error {
+    color: red;
+    font-size: 10px;
+}
+
+.registrar-evento {
+    background-color: rgb(35, 173, 237);
+    color: white;
+    font-weight: bold;
+    height: 40px;
+    width: 200px;
+}
+
+#buscador {
+    background-color: #F9F9F9;
+    height: 24px;
 }

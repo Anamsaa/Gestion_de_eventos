@@ -1,0 +1,128 @@
+
+*{
+    font-family:sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.titulo {
+    width: 100%;
+    height: 70px;
+    text-align: center;
+    align-content: center;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    background: linear-gradient(to right, rgb(103, 183, 233), rgb(35, 173, 237));
+    box-sizing: border-box;
+    padding: 20px; 
+}
+
+.titulo h1 {
+    align-self: center;
+}
+
+
+.buscador{
+    width: 300px;
+    height: 30px;
+    background-color: #F9F9F9;
+    align-self: center;
+}
+
+.formulario {
+    width: 50%;
+}
+
+.contenedor_registro {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.registrar {
+    padding: 20px;
+}
+
+
+input {
+    width: 200px;
+    height: 25px;
+    padding: 3px;
+    border-style: none;
+    background-color: rgb(235, 233, 233);
+    border-radius: 0.2rem;
+    outline: none;
+}
+
+.registrar input {
+    width: 160px;
+    height: 40px;
+    background-color: orange;
+    border: 0;
+    font-weight: bold;
+    border-radius: 1rem;
+}
+
+#boton-calcular {
+    align-self: flex-end;
+    justify-self: flex-start;
+    grid-row: 3 / 4 ;
+}
+
+#calcular {
+    background-color: orange;
+    border: 0;
+    font-weight: bold;
+    border-radius: 0.2rem;
+}
+
+.precio {
+    width: 100%
+}
+
+.precio_formulario{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 20px;
+    width: 100%;
+}
+
+.contenedor_precio_final {
+    background-color: white;
+    height: 2rem;
+    margin-top: 20px;
+    width: 100%;
+    padding: 2px;
+    align-self: center;
+}
+
+.titulo-precio {
+    display: inline-block;
+    grid-column: 1 / 4;
+}
+
+.precio {
+    display: flex; 
+}
+
+
+div #importe {
+    grid-row: 3 / 4; 
+}
+
+main {
+    display: flex;
+}
+
+
+.registro-conciertos {
+    width: 50%;
+    padding: 20px;
+    background-color: rgb(200, 199, 199);
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor evento</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="titulo">
+            <h1>Gestión de eventos</h1>
+            <div class="buscador">
+
+            </div>
+        </div>    
+    </header>
+
+    <main>
+        <div class="formulario">
+            <form id="registro-form" class="registro" onsubmit="registarConcierto()">
+    
+                <div class="contenedor_registro">
+                   <div class="div-contenedor">
+                       <label for="evento">Nombre del evento: </label>
+                       <br><br>
+                       <input type="text" id="evento" name="evento">
+                   </div>
+                   <div class="div-contenedor">
+                       <label for="artista">Artista: </label>
+                       <br><br>
+                       <input type="text" id="artista" name="artista">
+                   </div>
+                   <div class="div-contenedor">
+                       <label for="fecha">Fecha del evento: </label>
+                       <br><br>
+                       <input type="date" id="fecha" name="fecha">
+                   </div>
+                   <div class="div-contenedor">
+                       <label for="aforo">Número de asistentes: </label>
+                       <br><br>
+                       <input type="number" id="aforo" name="aforo">
+                   </div>
+                   <div class="div-contenedor">
+                       <label for="temporada">Temporada</label>
+                       <br><br>
+                       <input type="text" id="temporada" name="aforo">
+                   </div>
+                   <div class="div-contenedor">
+                       <label for="aforo">Sala</label>
+                        <br><br>
+                       <input type="number" id="sala" name="aforo">
+                   </div> 
+               </div>
+           
+                
+                <div class="precio">
+                    <div class="precio_formulario">
+                        <form>
+                            <h3 class="titulo-precio">Coste del evento</h3>
+                            <div class="contenedor-precio">
+                                <label for="cache">Caché del artista:</label>
+                                <br><br>
+                                <input type="number" id="cache" name="cache">
+                            </div>
+                            <div class="contenedor-precio">
+                                <label for="gastos">Gastos de Gestión:</label>
+                                <br><br>
+                                <input type="number" id="gastos_g" name="gastos_g">
+                            </div>
+                            <div class="contenedor-precio" id="importe">
+                                <label for="importe">Importe total: </label>
+                                <br><br>
+                                <input type="number" id="importe" name="importe">
+                            </div>
+                            <div class="contenedor-precio" id="precio_persona">
+                                <label for="importe">Precio por persona: </label>
+                                <br><br>
+                                <input type="number" id="precio_persona" name="importe">
+                            </div>
+                            <div class="contenedor-precio" id="boton-calcular">
+                                <input type="submit" value="Calcular" id="calcular">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="registrar">
+                    <input type="submit" value="Registrar">
+                </div>   
+            </form>
+        </div>
+
+        <div class="registro-conciertos">
+
+           
+            <div class="concierto">
+                <h3>Próximos conciertos</h3>
+                <div id="lista-conciertos" class="lista-conciertos">
+
+                </div>
+                <div class="conteo">
+                </div>
+            </div>
+                
+            <div class="agenda">
+                <h3>Agenda de conciertos</h3>
+                <div class="recordatorio">
+                    <div class="sala">
+
+                    </div>
+                    <div class="infromacion">
+
+                    </div>
+                </div>
+            </div>
+               
+
+            </div>
+        </div>
+    </main>
+    <script src="funciones.js"></script>
+</body>
+</html>

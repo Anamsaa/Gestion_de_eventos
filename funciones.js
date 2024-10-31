@@ -1,6 +1,82 @@
+<<<<<<< HEAD
+=======
+// Generar ID de concierto
+function generarIDConcierto() {
+
+    let aforo = document.getElementById('aforo').value,
+        gastos = document.getElementById('gastos_g').value, 
+        cache = document.getElementById('cache').value;
+
+    let precioBase = (parseFloat(cache) + parseFloat(gastos)) / aforo;
+
+    let fecha = new Date(document.getElementById('fecha').value); 
+    let dias = fecha / (1000 * 60 * 60 * 24); //pasamos a dias
+    
+    let random1 = Number.parseInt(Math.random()* precioBase); //Hacemos un numero random desde el precio base
+    let random2 = Number.parseInt(Math.random()*dias);  //Hacemos un numero random desde los dias de la fecha de concierto
+    
+    let id = Math.abs(random2-random1);     // Usamos Math.abs para que sea siempre positivo  y restamos los dos valores y sacamos la ID unica
+    return id;
+}
+
+//Array para almacenar los conciertos
+const conciertos = [];
+
+// Registrar Evento 
+function registrarEvento(event) {
+
+    event.preventDefault();
+
+    //.toUpperCase para convertir las letras a mayúsculas
+    let evento = document.getElementById('evento').value.toUpperCase(),
+        artista = document.getElementById('artista').value,
+        fecha = document.getElementById('fecha').value,
+        aforo = document.getElementById('aforo').value,
+        temporada = document.getElementById('temporada').value,
+        sala = parseInt(document.getElementById('sala').value);
+
+    // Creamos un objeto de tipo concierto
+    const concierto = {
+        id: generarIDConcierto(),
+        evento, 
+        artista: validarNombre(),//Funcion Tomeu
+        fecha,
+        aforo,
+        temporada,
+        precio: calcularPrecio(),
+        sala,
+        DiasAntelacion : calcularDiasAntelacion() //Funcion Tomeu
+
+        
+    };
+
+    conciertos.push(concierto);
+    agregarConcierto();
+    console.log(conciertos);
+    document.getElementById("registro-form").reset();
+}
+
+function agregarConcierto() {
+    const listaConciertos = document.getElementById("lista-conciertos");
+    listaConciertos.innerHTML = ""; 
+>>>>>>> origin/main
 
 
 
+<<<<<<< HEAD
+=======
+        conciertoCont.innerHTML = `
+            <p>Evento: ${concierto.evento}</p>
+            <p>Artista: ${concierto.artista}</p>
+            <p>Fecha: ${concierto.fecha}</p>
+            <p>Fecha: ${concierto.temporada}</p>
+            <p>Aforo: ${concierto.aforo}</p>
+            <p>Precio: ${concierto.precio}</p>
+            <p>ID: ${concierto.id}</p>
+            <p>Dias Antelacion: ${concierto.DiasAntelacion}</p>
+            <button class="eliminar" onclick="eliminarConcierto(${concierto.id})">Eliminar</button>
+        `; 
+>>>>>>> origin/main
 
 
 
@@ -81,59 +157,57 @@ function verificarSala() {
         // calcularIngresoPorAsistente(ingresoTotal, evento.asistentesEvento)
 
 
+
+
+
+
 // Funciones de Tomeu 
 
-//(Objeto Math):  //redondeamos a dos decimales 
-function calcularGestor(event){
-    event.preventDefault();
-
-    //funcion para calcularDivisionIngresos
-    let ingresoTotal = document.getElementById("ingresoTotal").value
-    let porcentajeArtista = document.getElementById("porcentajeArtista").value
-    let nombre = document.getElementById("validarNombreArtista").value
-    let beneficioArtista= Math.round((ingresoTotal*porcentajeArtista)/100); //sacamos los beneficios del artita ingresostotales*porcentaje artista/100 primero realizamos el calculo luego redondeamos
+//funciona psobile mejora
+function validarNombre(){
     
-    document.getElementById("resultado").innerText="Los beneficios del artista "+nombre+ " son :  "+ beneficioArtista +" euros";
+   
+ let nombre = document.getElementById("artista").value //Obtenemos el id del formulario
+ nombre = nombre.toLowerCase();; //convertimos el nombre del artista a minusculula
+ 
+ for(let i =0; i<nombre.length ; i++){ //miramos si tenemos espacios y los reemplazamos 
+    
+   nombre = nombre.replace(" ", "");
+   
 }
-
-function calcularCliente(event){
-    event.preventDefault();
-
- //funcion para validar nombre 
-
-    let nombre = document.getElementById("nombre").value
-    nombre = nombre.toLowerCase(); //convertimos el nombre del artista a minuscul
-    nombre = nombre.trim();
-
-    //funcion para generar ID
-
-    let fecha = new Date(fechaConcierto); 
-    let dias = fecha / (1000 * 60 * 60 * 24); //pasamos a dias
-
-    let random1 = Number.parseInt(Math.random()*precioBase); //Hacemos un numero random desde el precio base
-    let random2 = Number.parseInt(Math.random()*dias);  //Hacemos un numero random desde los dias de la fecha de concierto
-
-    let id = Math.abs(random2-random1);     // Usamos Math.abs para que sea siempre positivo  y restamos los dos valores y sacamos la ID unica
+   return nombre;
+ 
 
 
-//immprimir
-document.getElementById("resultado").innerText="El nombre del artisa es " + nombre;
-document.getElementById("resultado").innerText="Tu ID única es la : " + id;
 }
 
 
 
-function calcularDiasAntelacion(fechaConcierto, fechaVenta){
-    let concierto = new Date(fechaConcierto);
-    let venta = new Date(fechaVenta);
+//funciona
+function calcularDiasAntelacion(){
+    let fechaEvento =  new Date(document.getElementById("fecha").value) //obtenemos la fecha del id
+    let hoy = new Date(); // obtenemos la fecha actual
+    let diferencia = fechaEvento-hoy; //calculamos la diferencia del evento y la actual(milisegundos)
 
-    let diferencia = concierto-venta; // nos dará la diferencia en milisegundos 
+    let diferenciaDias =  Math.ceil(diferencia / (1000 * 60 * 60 * 24)); // Convertimos de milisegundos a dias yredondeamos hacia arriba con math ceil
 
-    let diferenciaDias = diferencia / (1000 * 60 * 60 * 24); // lo passamos a dias 
+    if(diferencia<0){//si el concierto ya ha passado  lo dejamos a 0 
+        diferenciaDias=0;
+      
+      }
+   
 
-    return  "Para abrir la  compra de tickets faltan : "+diferenciaDias + " dias";
+    return  diferenciaDias ;
 }
-//console.log (calcularDiasAntelacion("2024-01-01" , "2023-01-01"));
+
+//FALTA POR HACER
+function calcularDivisionIngresos(){
+    let cacheArtista = document.getElementById("cache").value
+    let porcentajeArtista = document.getElementById("porcentajeArtista").value
+   
+    let beneficioArtista= Math.round((ingresoTotal*porcentajeArtista)/100); //sacamos los beneficios del artita ingresostotales*porcentaje artista/100 primero realizamos el calculo luego redondeamos
+}
+
 
 
 

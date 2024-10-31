@@ -6,7 +6,7 @@
     <title>Gestor evento</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="funciones.js"></script>
+
 </head>
 <body>
     <header>
@@ -20,7 +20,7 @@
     </header>
     <main>
         <div class="formulario">
-            <form id="registro-form" class="registro" onsubmit="registrarEvento(event)">
+            <form id="registro-form" class="registro" onsubmit="enviarFormulario(event)">
                 <div class="contenedor_registro">
                    <div class="div-contenedor">
                        <label for="evento">Nombre del evento: </label>
@@ -45,7 +45,7 @@
                    <div class="div-contenedor">
                        <label for="temporada">Temporada</label>
                        <br><br>
-                       <input type="text" id="temporada" name="temporada">
+                       <input type="temporada" id="temporada" name="temporada" readonly>
                    </div>
                    <div class="div-contenedor">
                        <label for="sala">Sala</label>
@@ -72,11 +72,11 @@
                         <input type="number" id="gastos_g" name="gastos_g">
                     </div>
                     <div class="contenedor-precio" id="importe">
-                        <label for="importe">Ingreso por asistente:  </label>
+                        <label for="importeEsperado">Ingreso Esperado:  </label>
                         <br><br>
-                        <input type="number" id="importe" name="importe">
+                        <input type="number" id="importeEsperado" name="importeEsperado" readonly>
                     </div>
-                    <input type="submit" class="registrar-evento" value="Registrar evento">
+                    <input type="submit" id="registrar" class="registrar-evento" value="Registrar evento">
                </div> 
             </form>
         </div>
@@ -97,6 +97,222 @@
             </div>
         </div>
     </main>
-   
+    <script>
+
+    
+
+        function enviarFormulario(event) {
+
+
+            event.preventDefault();
+
+            //.toUpperCase para convertir las letras a mayúsculas
+            let evento = document.getElementById('evento').value.toUpperCase(),
+                artista = document.getElementById('artista').value,
+                fecha = document.getElementById('fecha').value,
+                aforo = document.getElementById('aforo').value,
+                sala = parseInt(document.getElementById('sala').value),
+                gastos = document.getElementById('gastos_g').value,
+                cache = document.getElementById('cache').value,
+                tickets = parseInt(document.getElementById('tickets').value);
+
+            function determinarTemporada(fechaInput) {
+                // Conversión String a Date, fecha viene como String del campo Fecha del Evento
+                const fecha = typeof fechaInput === "string" ? new Date(fechaInput) : fechaInput;
+
+                // Helper function to calculate days since the start of the year
+                
+                function diasInicioAño(fechaInicio) {
+                    const comienzoAño = new Date(fechaInicio.getFullYear(), 0, 1);
+                    const diferenciaTiempo = fechaInicio - comienzoAño;
+                    return Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
+                }
+
+                // Days thresholds for each season based on 2023
+                const año = fecha.getFullYear();
+                const diasInicioPrimavera = diasInicioAño(new Date(año, 2, 20));  // March 20
+                const diasFinPrimavera = diasInicioAño(new Date(año, 5, 20));     // June 20
+                const diasInicioVerano = diasInicioAño(new Date(año, 5, 20));     // June 20
+                const diasFinVerano = diasInicioAño(new Date(año, 8, 22));        // September 22
+                const diasInicioOtoño = diasInicioAño(new Date(año, 8, 22));      // September 22
+                const diasFinOtoño = diasInicioAño(new Date(año, 11, 21));        // December 21
+                const diasInicioInvierno = diasInicioAño(new Date(año, 11, 21));  // December 21
+                const diasTotales = diasInicioAño(fecha);
+
+                // Determine season based on days passed since the start of the year
+                let temporada = "";
+                if (diasTotales >= diasInicioPrimavera && diasTotales < diasFinPrimavera) {
+                    temporada = "primavera";
+                } else if (diasTotales >= diasInicioVerano && diasTotales < diasFinVerano) {
+                    temporada = "verano";
+                } else if (diasTotales >= diasInicioOtoño && diasTotales < diasFinOtoño) {
+                    temporada = "otoño";
+                } else {
+                    temporada = "invierno";
+                }
+                return temporada;
+            }
+
+            // objeto para guardar campos
+            const temporada = determinarTemporada(fecha);
+            const campoTemporada = document.getElementById("temporada");
+            // const campoImporteTotal = document.getElementById("importe");
+            // asignamos valor temporada al campo temporada
+            campoTemporada.value = temporada;
+
+            function generarIDConcierto() {
+
+                let precioBase = (parseFloat(cache) + parseFloat(gastos)) / aforo;
+                let dias = new Date(fecha).getTime() / (1000 * 60 * 60 * 24); //pasamos a dias
+                // console.log(precioBase);
+                // console.log(dias);
+                let random1 = Number.parseInt(Math.random()* precioBase); //Hacemos un numero random desde el precio base
+                let random2 = Number.parseInt(Math.random()*dias);  //Hacemos un numero random desde los dias de la fecha de concierto
+               
+                let id = Math.abs(random2-random1);     // Usamos Math.abs para que sea siempre positivo  y restamos los dos valores y sacamos la ID unica
+
+                // console.log(id);
+                
+                return id;
+            }
+
+            function calcularPrecio() {
+
+                // Comprobar que el número de asistentes se ajusta a la sala: 
+                let precioBase = (parseFloat(cache) + parseFloat(gastos)) / aforo;
+                // Redondear el precio base 
+                return Math.round(precioBase * 100)/100; 
+            }
+
+            // Creamos un objeto de tipo concierto
+            const concierto = {
+                id: generarIDConcierto(),
+                evento, 
+                artista,
+                fecha,
+                aforo,
+                temporada: determinarTemporada(fecha),
+                precio: calcularPrecio(),
+                sala,
+                descripcion: crearDescripcionEvento(evento, artista, new Date(fecha))
+            };
+
+     
+
+            function agregarConcierto() {
+                const listaConciertos = document.getElementById("lista-conciertos");
+                listaConciertos.innerHTML = ""; 
+
+
+                // Hacemos un for-each del array de conciertos
+                conciertos.forEach(concierto => {
+                    // Crear un elemento div, donde se almacena la info. por cada concierto registrado que tenga el array
+                    let conciertoCont = document.createElement("div");
+                    conciertoCont.classList.add("concierto_reg");
+
+                    conciertoCont.innerHTML = `
+                    <p>Evento: ${concierto.evento}</p>
+                    <p>Artista: ${concierto.artista}</p>
+                    <p>Fecha: ${concierto.fecha}</p>
+                    <p>Temporada: ${concierto.temporada}</p>
+                    <p>Aforo: ${concierto.aforo}</p>
+                    <p>Precio: ${concierto.precio}</p>
+                    <p>ID: ${concierto.id}</p>
+                    <p>Descripcion: ${concierto.descripcion}</p>
+                    <button class="eliminar" onclick="eliminarConcierto(${concierto.id})">Eliminar</button>
+                    `; 
+
+                    listaConciertos.appendChild(conciertoCont);
+                });
+
+      
+            }
+
+            //Array para almacenar los conciertos
+            const conciertos = ["kajgkajk"];
+
+            function registrarEvento() {
+
+        
+                conciertos.push(concierto);
+                agregarConcierto();
+                console.log(conciertos);
+                document.getElementById("registro-form").reset();
+
+
+            }
+
+            registrarEvento();
+
+            // Eliminar el concierto en función de su id
+            // function eliminarConcierto(id) {
+            //     //Se inicializa en -1, para indicar que aún no encontramos al concierto.
+            //     let index = -1; 
+            //     for (let i = 0; i < conciertos.length; i++){
+            //     // Buscamos en el array de concierto el que coincida con el ID
+            //     if (conciertos[i].id === id){
+            //     //Guardamos el índice del concierto
+            //     index = i;
+            //     break;
+            //     }
+            //     }
+            //     // El indice siempre será mayor a -1
+            //     if (index > -1) {
+            //         // Si encontramos su ubicación eliminaremos solo el concierto que esté en ese índice
+            //         conciertos.splice(index, 1);
+            //         //Actualizamos los próximos conciertos llamando a la función de agregar concierto
+            //         agregarConcierto();
+            //     }
+            // }
+
+            function validarTickets() {
+               
+                document.getElementById('tickets-error').innerHTML = ""; 
+                let esValido = true;
+
+                if (tickets > aforo) {
+                    document.getElementById('tickets-error').innerHTML = "El número de tickets no puede exceder el aforo permitido";
+                    esValido = false;
+                }
+            }
+           
+            validarTickets()
+
+            
+            /*Calcular Ingresos Esperados: VERIFICAR CALCULO PRECIO DEL TICKET CON ANA*/
+
+            function calcularIngresosEsperados(precioTicket, ticketsVendidos) {
+
+                return precioTicket * ticketsVendidos;
+            }
+
+
+            let ingresoEsperado = document.getElementById('importeEsperado');
+            
+            ingresoEsperado.value = calcularIngresosEsperados(concierto.precio, tickets);
+
+
+            //Crear Descripción del Evento:
+    
+            function crearDescripcionEvento(evento, artista, fecha) {
+
+                // función para convertir fecha a formato español, parámetro fecha tipo new Date()
+
+                function formatoEspañolFecha(fecha) {
+                    return new Intl.DateTimeFormat('es-ES', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                    }).format(fecha);
+                }
+
+                return (`Disfruta del Concierto ${evento} de la mano de ${artista} el próximo ${formatoEspañolFecha(fecha)}`)
+            }
+        }
+       
+    
+        
+
+    </script>
 </body>
 </html>

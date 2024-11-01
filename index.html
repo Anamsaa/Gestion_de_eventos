@@ -188,13 +188,15 @@
             const concierto = {
                 id: generarIDConcierto(),
                 evento, 
-                artista,
+                artista: validarNombre(),//Funcion Tomeu
                 fecha,
                 aforo,
                 temporada: determinarTemporada(fecha),
                 precio: calcularPrecio(),
                 sala,
-                descripcion: crearDescripcionEvento(evento, artista, new Date(fecha))
+                impuestos : CalcularIva(),
+                DiasAntelacion : calcularDiasAntelacion(),//Funcion Tomeu,
+                descripcion: crearDescripcionEvento(evento, validarNombre(), new Date(fecha)) // (TOMEU)añado validar para que se vea el nombre tambíen correcto
             };
 
      
@@ -219,6 +221,8 @@
                     <p>Precio: ${concierto.precio}</p>
                     <p>ID: ${concierto.id}</p>
                     <p>Descripcion: ${concierto.descripcion}</p>
+                    <p>Dias Antelacion: ${concierto.DiasAntelacion}</p>
+                    <p>impuestos : ${concierto.impuestos }</p>
                     <button class="eliminar" onclick="eliminarConcierto(${concierto.id})">Eliminar</button>
                     `; 
 
@@ -309,6 +313,55 @@
                 return (`Disfruta del Concierto ${evento} de la mano de ${artista} el próximo ${formatoEspañolFecha(fecha)}`)
             }
         }
+
+
+        //Funciones Tomeu
+        //funciona
+function calcularDiasAntelacion(){
+    let fechaEvento =  new Date(document.getElementById("fecha").value) //obtenemos la fecha del id
+    let hoy = new Date(); // obtenemos la fecha actual
+    let diferencia = fechaEvento-hoy; //calculamos la diferencia del evento y la actual(milisegundos)
+
+    let diferenciaDias =  Math.ceil(diferencia / (1000 * 60 * 60 * 24)); // Convertimos de milisegundos a dias yredondeamos hacia arriba con math ceil
+
+    if(diferencia<0){//si el concierto ya ha passado  lo dejamos a 0 
+        diferenciaDias=0;
+      
+      }
+   
+
+    return  diferenciaDias ;
+}
+
+
+function validarNombre(){
+   
+    let nombre = document.getElementById("artista").value //Obtenemos el id del formulario
+    nombre = nombre.toLowerCase();; //convertimos el nombre del artista a minusculula
+    
+    for(let i =0; i<nombre.length ; i++){ //miramos si tenemos espacios y los reemplazamos 
+       
+      nombre = nombre.replace(" ", "");
+      
+   }
+      return nombre;
+    
+   
+   
+   }
+
+   
+   function CalcularIva(){
+
+    let gasto1 = document.getElementById("cache").value; //accedemos al cache del fomrulario
+    let gasto2 = document.getElementById("gastos_g").value; //accedemos a los gastos del formulario
+    total = parseFloat(gasto1) + parseFloat(gasto2);  //sumamos los dos gastos
+
+    iva = (total*21)/100; //calculamos el iva que es el 21%
+
+    return iva;
+
+   }
        
     
         

@@ -120,8 +120,7 @@
 
             // Validaciones
             // Se realizan la validación de campos antes de registar los valores del formulario en el array. 
-
-            if (!validarTickets(tickets,aforo)) return; 
+            // if (!validarTickets(tickets,aforo)) return; 
 
 
             // Creamos un objeto de tipo concierto
@@ -142,8 +141,6 @@
             registrarEvento(concierto);
             document.getElementById("registro-form").reset();
 
-           
-                
             function determinarTemporada(fechaInput) {
             // Conversión String a Date, fecha viene como String del campo Fecha del Evento
             const fecha = typeof fechaInput === "string" ? new Date(fechaInput) : fechaInput;

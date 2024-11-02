@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Generar ID de concierto
 function generarIDConcierto() {
 
@@ -82,6 +83,8 @@ function agregarConcierto() {
 
 
 
+=======
+>>>>>>> 7a3ca9b9c88323ee0fbf5dd7a816b7ea1ab1bb10
 // EN PRUEBASSS
 function verificarSala() {
 
@@ -154,48 +157,6 @@ function verificarSala() {
         // calcularIngresoPorAsistente(ingresoTotal, evento.asistentesEvento)
 
 
-
-
-
-
-// Funciones de Tomeu 
-
-//funciona psobile mejora
-function validarNombre(){
-    
-   
- let nombre = document.getElementById("artista").value //Obtenemos el id del formulario
- nombre = nombre.toLowerCase();; //convertimos el nombre del artista a minusculula
- 
- for(let i =0; i<nombre.length ; i++){ //miramos si tenemos espacios y los reemplazamos 
-    
-   nombre = nombre.replace(" ", "");
-   
-}
-   return nombre;
- 
-
-
-}
-
-
-
-//funciona
-function calcularDiasAntelacion(){
-    let fechaEvento =  new Date(document.getElementById("fecha").value) //obtenemos la fecha del id
-    let hoy = new Date(); // obtenemos la fecha actual
-    let diferencia = fechaEvento-hoy; //calculamos la diferencia del evento y la actual(milisegundos)
-
-    let diferenciaDias =  Math.ceil(diferencia / (1000 * 60 * 60 * 24)); // Convertimos de milisegundos a dias yredondeamos hacia arriba con math ceil
-
-    if(diferencia<0){//si el concierto ya ha passado  lo dejamos a 0 
-        diferenciaDias=0;
-      
-      }
-   
-
-    return  diferenciaDias ;
-}
 
 //FALTA POR HACER
 function calcularDivisionIngresos(){

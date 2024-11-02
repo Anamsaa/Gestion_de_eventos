@@ -41,7 +41,7 @@
                        <label for="aforo">Número de asistentes: </label>
                        <br><br>
                        <!-- <input type="number" id="aforo" name="aforo"  onchange="validarCapacidadSalas()" required> -->
-                       <input type="number" id="aforo" name="aforo" required>
+                       <input type="number" id="aforo" name="aforo" min="0" oninput="validarCapacidadSalas()">
                    </div>
                    <div class="div-contenedor">
                        <label for="temporada">Temporada</label>
@@ -53,9 +53,9 @@
                         <br><br>
                        <!-- <input type="number" id="sala" name="sala" required> -->
                        <select name="sala" id="sala">
-                        <option value="1">sala 1</option>
+                        <!-- <option value="1">sala 1</option>
                         <option value="2">sala 2</option>
-                        <option value="3">sala 3</option>
+                        <option value="3">sala 3</option> -->
                       </select>
                        <div class="error" id="sala-error"></div>
                    </div> 
@@ -69,14 +69,14 @@
                    <div class="div-contenedor">
                         <label for="duracionCodigoPromocional">Duración Código Promocional: </label>
                         <br><br>
-                        <input type="number" id="duracionCodigoPromocional" name="duracionCodigoPromocional" required>
+                        <input type="number" id="duracionCodigoPromocional" min="0" name="duracionCodigoPromocional" required>
                         <!-- <div class="error" id="tickets-error"></div> -->
                     </div>
 
                     <div class="div-contenedor">
-                        <label for="porcentajeCodigoPromocional">Duración Código Promocional: </label>
+                        <label for="porcentajeCodigoPromocional">Porcentaje Código Promocional: </label>
                         <br><br>
-                        <input type="number" id="porcentajeCodigoPromocional" name="porcentajeCodigoPromocional" required>
+                        <input type="number" id="porcentajeCodigoPromocional" min="0" nsame="porcentajeCodigoPromocional" required>
                         <!-- <div class="error" id="tickets-error"></div> -->
                     </div>
 
@@ -126,42 +126,46 @@
         let arraySalas = [{id:1, nombre:"sala 1", capacidad: 150},{id:2, nombre:"sala 2", capacidad: 250},{id:3, nombre:"sala 3", capacidad: 350}];
 
         // // VERIFICAR SI EL VALOR ES DE NUEVO 0 o ESPACIO EN BLANCO
-        // function selectSalas(arraySalas) {
+        function selectSalas(arraySalas) {
             
-        //     const elementSala = document.getElementById("salas");
+            const elementSala = document.getElementById("sala");
 
-        //     while (elementSala.hasChildNodes()) {
-        //         elementSala.removeChild(elementSala.firstChild);
-        //     }
+            while (elementSala.hasChildNodes()) {
+                elementSala.removeChild(elementSala.firstChild);
+            }
 
-        //     arraySalas.forEach(sala => {
+            /* seleccionamos la primera sala que cubra el número de asistentes para no infrautilizar el 
+            resto de salas de mayor aforo */
+            arraySalas = [arraySalas[0] || "no hay salas"];
+            
+            arraySalas.forEach(sala => {
 
-        //         const option = document.createElement("option");
-        //         option.setAttribute("value",sala.nombre);
-        //         const text = document.createTextNode(`${sala.nombre}`);
-        //         option.appendChild(text);
-        //         elementSala.appendChild(option)
+                const option = document.createElement("option");
+                option.setAttribute("value",sala.nombre || "no sala");
+                const text = document.createTextNode(`${sala.nombre || "no hay sala disponible"}`);
+                option.appendChild(text);
+                elementSala.appendChild(option)
 
-        //     });
+            });
         
-        // }
+        }
 
-        // selectSalas(arraySalas);
+        selectSalas(arraySalas);
 
         // FUNCIÓN PARA 
-        // function validarCapacidadSalas() {
+        function validarCapacidadSalas() {
+        
+            aforo = document.getElementById('aforo').value;
 
-        //     aforo = document.getElementById('aforo').value;
+            // sólo mostrar aquellas salas que cumplan con la capacidad mínima según asistentes
+            arraySalas = arraySalas.filter((sala) => sala.capacidad >= aforo);
 
-        //     if (aforo != 0 || aforo != " ") {
+            selectSalas(arraySalas)
+            
+            // se reinicializa el array cada vez que se seleccionan salas para poder volver a filtrar por salas de menor aforo
 
-        //         arraySalas = arraySalas.filter((sala) => sala.capacidad >= aforo);
-
-        //         selectSalas(arraySalas);
-        //     }
-
-
-        // }
+            arraySalas = [{id:1, nombre:"sala 1", capacidad: 150},{id:2, nombre:"sala 2", capacidad: 250},{id:3, nombre:"sala 3", capacidad: 350}];;
+        }
 
         function enviarFormulario(event) {
 
@@ -172,7 +176,7 @@
                 artista = document.getElementById('artista').value,
                 fecha = document.getElementById('fecha').value,
                 aforo = document.getElementById('aforo').value,
-                sala = parseInt(document.getElementById('sala').value),
+                sala = document.getElementById('sala').value,
                 gastos = document.getElementById('gastos_g').value,
                 cache = document.getElementById('cache').value,
                 codigoPromocional = document.getElementById('codigoPromocional').value,
@@ -408,6 +412,7 @@
                 <p>Fecha: ${concierto.fecha}</p>
                 <p>Temporada: ${concierto.temporada}</p>
                 <p>Aforo: ${concierto.aforo}</p>
+                <p>Sala: ${concierto.sala}</p>
                 <p>Precio: ${concierto.precio}</p>
                 <p>ID: ${concierto.id}</p>
                 <p>Descripcion: ${concierto.descripcion}</p>

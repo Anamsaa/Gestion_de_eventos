@@ -118,6 +118,12 @@
                 tickets = parseInt(document.getElementById('tickets').value);
 
 
+            // Validaciones
+            // Se realizan la validación de campos antes de registar los valores del formulario en el array. 
+
+            if (!validarTickets(tickets,aforo)) return; 
+
+
             // Creamos un objeto de tipo concierto
             const concierto = {
                 id: generarIDConcierto(),
@@ -134,6 +140,9 @@
             };
 
             registrarEvento(concierto);
+            document.getElementById("registro-form").reset();
+
+           
                 
             function determinarTemporada(fechaInput) {
             // Conversión String a Date, fecha viene como String del campo Fecha del Evento
@@ -200,8 +209,6 @@
                 return Math.round(precioBase * 100)/100; 
             }
 
-            validarTickets()
-
             /*Calcular Ingresos Esperados: VERIFICAR CALCULO PRECIO DEL TICKET CON ANA*/
             function calcularIngresosEsperados(precioTicket, ticketsVendidos) {
                 return precioTicket * ticketsVendidos;
@@ -258,51 +265,41 @@
 
                 return iva;
             }
-
-            function registrarEvento(concierto) {
-                conciertos.push(concierto);
-                agregarConcierto();
-                console.log(conciertos);
-                document.getElementById("registro-form").reset();
-            }
-
-            function validarTickets() {
-                document.getElementById('tickets-error').innerHTML = ""; 
-                let esValido = true;
-
-                if (tickets > aforo) {
-                    document.getElementById('tickets-error').innerHTML = "El número de tickets no puede exceder el aforo permitido";
-                    esValido = false;
-                }
-            }
         }
 
-
+        // Funciones --Ana
         // No mover eliminarConcierto - ni agregarConcierto (Las dos deben estar fuera de enviarFormulario)
-
-        // Eliminar el concierto en función de su id
+        // eliminarConcierto: Eliminar el concierto en función de su id
         function eliminarConcierto(id) {
-                alert("prueba funcion");
-                //Se inicializa en -1, para indicar que aún no encontramos al concierto.
-                let index = -1; 
-                for (let i = 0; i < conciertos.length; i++){
-                    // Buscamos en el array de concierto el que coincida con el ID
-                    if (conciertos[i].id === Number(id)){
+            alert("prueba funcion");
+            //Se inicializa en -1, para indicar que aún no encontramos al concierto.
+            let index = -1; 
+            for (let i = 0; i < conciertos.length; i++){
+                // Buscamos en el array de concierto el que coincida con el ID
+                if (conciertos[i].id === Number(id)){
                     //Guardamos el índice del concierto
                     index = i;
                     console.log(index);
                     break;
-                    }
                 }
-                // El indice siempre será mayor a -1
-                if (index > -1) {
-                    // Si encontramos su ubicación eliminaremos solo el concierto que esté en ese índice
-                    conciertos.splice(index, 1);
-                    //Actualizamos los próximos conciertos llamando a la función de agregar concierto
-                    agregarConcierto();
-                }
+            }
+            // El indice siempre será mayor a -1
+            if (index > -1) {
+                // Si encontramos su ubicación eliminaremos solo el concierto que esté en ese índice
+                conciertos.splice(index, 1);
+                // Actualizamos los próximos conciertos llamando a la función de agregar concierto
+                agregarConcierto();
+            }
         }
 
+        // registrarEvento: Sirve para guardar los objetos de la clase concierto en el array, hacemos uso del .push para agregarlo a la última posición del array
+        function registrarEvento(concierto) {
+                conciertos.push(concierto);
+                agregarConcierto();
+                console.log(conciertos);     
+        }
+
+        // agregarConcierto: Sirve para añadir conciertos al apartado de "Próximos conciertos"
         function agregarConcierto() {
 
         const listaConciertos = document.getElementById("lista-conciertos");
@@ -330,6 +327,18 @@
 
                 listaConciertos.appendChild(conciertoCont);
             });      
+        }
+
+        function validarTickets(tickets, aforo) {
+            document.getElementById('tickets-error').innerHTML = "";
+            alert("Se activa la función de validar tickets");
+            console.log("se activa la función");
+            let esValido = true;
+
+            if (tickets > aforo) {
+                document.getElementById('tickets-error').innerHTML = "El número de tickets no puede exceder el aforo permitido";
+                esValido = false;
+            }
         }
     </script>
 </body>

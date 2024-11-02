@@ -96,7 +96,7 @@ main {
 #buscador {
     background-color: #F9F9F9;
     height: 24px;
-}
+} 
 
 .eliminar {
     margin-top: 10px; 
@@ -109,7 +109,11 @@ main {
     border-radius: 0.2rem;
 }
 
-.agenda {
+.error {
+    padding-top: 5px;
 
+}
+
+.agenda {
     margin-top: 20px;
 }

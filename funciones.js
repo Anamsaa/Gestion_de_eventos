@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 // Generar ID de concierto
 function generarIDConcierto() {
 
@@ -59,7 +57,6 @@ function registrarEvento(event) {
 function agregarConcierto() {
     const listaConciertos = document.getElementById("lista-conciertos");
     listaConciertos.innerHTML = ""; 
->>>>>>> origin/main
 
 
 

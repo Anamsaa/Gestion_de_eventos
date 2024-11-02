@@ -13,7 +13,7 @@
         <div class="titulo">
             <h1>Gestión de eventos</h1>
             <div class="busqueda">
-                <input type="text" id="buscador" placeholder="Encuentra tu concierto">
+                <input type="text" id="buscador" placeholder="Encuentra tu concierto" required>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
         </div>    
@@ -25,22 +25,23 @@
                    <div class="div-contenedor">
                        <label for="evento">Nombre del evento: </label>
                        <br><br>
-                       <input type="text" id="evento" name="evento">
+                       <input type="text" id="evento" name="evento" required>
                    </div>
                    <div class="div-contenedor">
                        <label for="artista">Artista: </label>
                        <br><br>
-                       <input type="text" id="artista" name="artista">
+                       <input type="text" id="artista" name="artista" required>
                    </div>
                    <div class="div-contenedor">
                        <label for="fecha">Fecha del evento: </label>
                        <br><br>
-                       <input type="date" id="fecha" name="fecha">
+                       <input type="date" id="fecha" name="fecha" required>
                    </div>
                    <div class="div-contenedor">
                        <label for="aforo">Número de asistentes: </label>
                        <br><br>
-                       <input type="number" id="aforo" name="aforo">
+                       <!-- <input type="number" id="aforo" name="aforo"  onchange="validarCapacidadSalas()" required> -->
+                       <input type="number" id="aforo" name="aforo" required>
                    </div>
                    <div class="div-contenedor">
                        <label for="temporada">Temporada</label>
@@ -50,26 +51,45 @@
                    <div class="div-contenedor">
                        <label for="sala">Sala</label>
                         <br><br>
-                       <input type="number" id="sala" name="sala">
+                       <!-- <input type="number" id="sala" name="sala" required> -->
+                       <select name="sala" id="sala">
+                        <option value="1">sala 1</option>
+                        <option value="2">sala 2</option>
+                        <option value="3">sala 3</option>
+                      </select>
                        <div class="error" id="sala-error"></div>
                    </div> 
                    <div class="div-contenedor">
-                       <label for="tickets">Tickets vendidos: </label>
+                       <label for="codigoPromocional">Código Promocional: </label>
                         <br><br>
-                       <input type="number" id="tickets" name="tickets">
-                       <div class="error" id="tickets-error"></div>
+                       <input type="text" id="codigoPromocional" name="codigoPromocional" readonly>
+                       <!-- <div class="error" id="tickets-error"></div> -->
                    </div>
+
+                   <div class="div-contenedor">
+                        <label for="duracionCodigoPromocional">Duración Código Promocional: </label>
+                        <br><br>
+                        <input type="number" id="duracionCodigoPromocional" name="duracionCodigoPromocional" required>
+                        <!-- <div class="error" id="tickets-error"></div> -->
+                    </div>
+
+                    <div class="div-contenedor">
+                        <label for="porcentajeCodigoPromocional">Duración Código Promocional: </label>
+                        <br><br>
+                        <input type="number" id="porcentajeCodigoPromocional" name="porcentajeCodigoPromocional" required>
+                        <!-- <div class="error" id="tickets-error"></div> -->
+                    </div>
 
                    <h3 class="titulo-precio">Calcular coste del evento</h3>
                     <div class="contenedor-precio">
                         <label for="cache">Caché del artista:</label>
                         <br><br>
-                        <input type="number" id="cache" name="cache">
+                        <input type="number" id="cache" name="cache" required>
                     </div>
                     <div class="contenedor-precio">
                         <label for="gastos">Gastos de Gestión:</label>
                         <br><br>
-                        <input type="number" id="gastos_g" name="gastos_g">
+                        <input type="number" id="gastos_g" name="gastos_g" required>
                     </div>
                     <div class="contenedor-precio" id="importe">
                         <label for="importeEsperado">Ingreso Esperado:  </label>
@@ -103,10 +123,50 @@
          // Para evitar que en cada envío del formulario se actualice la posición 0, se declara fuera. 
         const conciertos = [];
 
+        let arraySalas = [{id:1, nombre:"sala 1", capacidad: 150},{id:2, nombre:"sala 2", capacidad: 250},{id:3, nombre:"sala 3", capacidad: 350}];
+
+        // // VERIFICAR SI EL VALOR ES DE NUEVO 0 o ESPACIO EN BLANCO
+        // function selectSalas(arraySalas) {
+            
+        //     const elementSala = document.getElementById("salas");
+
+        //     while (elementSala.hasChildNodes()) {
+        //         elementSala.removeChild(elementSala.firstChild);
+        //     }
+
+        //     arraySalas.forEach(sala => {
+
+        //         const option = document.createElement("option");
+        //         option.setAttribute("value",sala.nombre);
+        //         const text = document.createTextNode(`${sala.nombre}`);
+        //         option.appendChild(text);
+        //         elementSala.appendChild(option)
+
+        //     });
+        
+        // }
+
+        // selectSalas(arraySalas);
+
+        // FUNCIÓN PARA 
+        // function validarCapacidadSalas() {
+
+        //     aforo = document.getElementById('aforo').value;
+
+        //     if (aforo != 0 || aforo != " ") {
+
+        //         arraySalas = arraySalas.filter((sala) => sala.capacidad >= aforo);
+
+        //         selectSalas(arraySalas);
+        //     }
+
+
+        // }
+
         function enviarFormulario(event) {
 
             event.preventDefault();
-
+            
             //.toUpperCase para convertir las letras a mayúsculas
             let evento = document.getElementById('evento').value.toUpperCase(),
                 artista = document.getElementById('artista').value,
@@ -115,14 +175,19 @@
                 sala = parseInt(document.getElementById('sala').value),
                 gastos = document.getElementById('gastos_g').value,
                 cache = document.getElementById('cache').value,
-                tickets = parseInt(document.getElementById('tickets').value);
+                codigoPromocional = document.getElementById('codigoPromocional').value,
+                duracionCodigoPromocional = document.getElementById('duracionCodigoPromocional').value,
+                porcentajeCodigoPromocional = document.getElementById('porcentajeCodigoPromocional').value
 
 
             // Validaciones
             // Se realizan la validación de campos antes de registar los valores del formulario en el array. 
             // if (!validarTickets(tickets,aforo)) return; 
+            // tickets = parseInt(document.getElementById('tickets').value);
 
+            let preTextList = ["G2","K7", "M2", "AM", "TP", "MS"]
 
+            const preText = preTextList[Math.floor(Math.random() * preTextList.length)];
             // Creamos un objeto de tipo concierto
             const concierto = {
                 id: generarIDConcierto(),
@@ -135,11 +200,13 @@
                 sala,
                 impuestos : CalcularIva(),
                 DiasAntelacion : calcularDiasAntelacion(),//Funcion Tomeu,
-                descripcion: crearDescripcionEvento(evento, validarNombre(), new Date(fecha)) // (TOMEU)añado validar para que se vea el nombre tambíen correcto
+                descripcion: crearDescripcionEvento(evento, validarNombre(), new Date(fecha)), // (TOMEU)añado validar para que se vea el nombre tambíen correcto
+                ingresosEsperados:calcularIngresosEsperados(calcularPrecio(), aforo),
+                codigoPromocional: generarCodigo(preText, porcentajeCodigoPromocional, fecha, duracionCodigoPromocional, token = generarTokenCodigo())
             };
 
             registrarEvento(concierto);
-            document.getElementById("registro-form").reset();
+            //document.getElementById("registro-form").reset();
 
             function determinarTemporada(fechaInput) {
             // Conversión String a Date, fecha viene como String del campo Fecha del Evento
@@ -178,6 +245,39 @@
             return temporada;
             }
 
+            /*
+                OBJETO STRING
+                Función: Generar el código promocional basandonos en
+                1 - Texto introductorio Ej "G2"
+                2 - El porcentaje que deseamos aplicarle
+                3 - El token el cuál se generara por defecto, no hay que llenar esto.
+                4 - La duración del codigo en días.
+            */
+
+            function generarTokenCodigo(){
+                return Math.floor(Math.random()*9);
+            }
+    
+            function generarCodigo(preText, porcentajeCodigoPromocional, fechaEvento, duracionCodigoPromocional, token = generarTokenCodigo()){
+                let fecha = generarDuracionCodigo(fechaEvento,duracionCodigoPromocional);
+                return preText.concat(token) +"-"+ fechaEvento + "-" + porcentajeCodigoPromocional;
+            }
+    
+            codigoPromocionalElement = document.getElementById('codigoPromocional');
+            
+            codigoPromocionalElement.value = concierto.codigoPromocional
+
+
+            /*
+                OBJETO DATE
+            */
+
+            function generarDuracionCodigo(fechaEvento, duracionCodigoPromocional) { //SINTAX FECHA EJ: 2000-01-12   AÑO MES DÍA, LUEGO 
+                const fecha = new Date(fechaEvento);
+                fecha.setDate(fecha.getDate() + duracionCodigoPromocional);
+                return fecha.toISOString().split('T')[0]; //RESULTADO DIAS
+            }
+
             // objeto para guardar campos
             const temporada = determinarTemporada(fecha);
             const campoTemporada = document.getElementById("temporada");
@@ -189,13 +289,9 @@
 
                 let precioBase = (parseFloat(cache) + parseFloat(gastos)) / aforo;
                 let dias = new Date(fecha).getTime() / (1000 * 60 * 60 * 24); //pasamos a dias
-                // console.log(precioBase);
-                // console.log(dias);
                 let random1 = Number.parseInt(Math.random()* precioBase); //Hacemos un numero random desde el precio base
                 let random2 = Number.parseInt(Math.random()*dias);  //Hacemos un numero random desde los dias de la fecha de concierto
-
                 let id = Math.abs(random2-random1);     // Usamos Math.abs para que sea siempre positivo  y restamos los dos valores y sacamos la ID unica
-                // console.log(id);
                 return id;
             }
 
@@ -208,11 +304,12 @@
 
             /*Calcular Ingresos Esperados: VERIFICAR CALCULO PRECIO DEL TICKET CON ANA*/
             function calcularIngresosEsperados(precioTicket, ticketsVendidos) {
-                return precioTicket * ticketsVendidos;
+                return (precioTicket * ticketsVendidos).toFixed(2);
             }
 
             let ingresoEsperado = document.getElementById('importeEsperado');
-            ingresoEsperado.value = calcularIngresosEsperados(concierto.precio, tickets);
+
+            ingresoEsperado.value = concierto.ingresosEsperados;
 
             //Crear Descripción del Evento:
             function crearDescripcionEvento(evento, artista, fecha) {
@@ -228,15 +325,15 @@
             }
 
             function calcularDiasAntelacion(){
-            let fechaEvento =  new Date(document.getElementById("fecha").value) //obtenemos la fecha del id
-            let hoy = new Date(); // obtenemos la fecha actual
-            let diferencia = fechaEvento-hoy; //calculamos la diferencia del evento y la actual(milisegundos)
+                let fechaEvento =  new Date(document.getElementById('fecha').value) //obtenemos la fecha del id fecha
+                let hoy = Date.now(); // obtenemos la fecha actual
+                let diferencia = fechaEvento-hoy; //calculamos la diferencia del evento y la actual(milisegundos)
+                console.log(hoy);
+                let diferenciaDias =  Math.ceil(diferencia / (1000 * 60 * 60 * 24)); // Convertimos de milisegundos a dias yredondeamos hacia arriba con math ceil
 
-            let diferenciaDias =  Math.ceil(diferencia / (1000 * 60 * 60 * 24)); // Convertimos de milisegundos a dias yredondeamos hacia arriba con math ceil
-
-                if(diferencia<0){//si el concierto ya ha passado  lo dejamos a 0 
-                    diferenciaDias=0;
-                }
+                    if(diferencia<0){//si el concierto ya ha passado  lo dejamos a 0 
+                        diferenciaDias=0;
+                    }
                 return  diferenciaDias ;
             }
 
@@ -268,7 +365,6 @@
         // No mover eliminarConcierto - ni agregarConcierto (Las dos deben estar fuera de enviarFormulario)
         // eliminarConcierto: Eliminar el concierto en función de su id
         function eliminarConcierto(id) {
-            alert("prueba funcion");
             //Se inicializa en -1, para indicar que aún no encontramos al concierto.
             let index = -1; 
             for (let i = 0; i < conciertos.length; i++){
@@ -276,7 +372,6 @@
                 if (conciertos[i].id === Number(id)){
                     //Guardamos el índice del concierto
                     index = i;
-                    console.log(index);
                     break;
                 }
             }
@@ -292,8 +387,7 @@
         // registrarEvento: Sirve para guardar los objetos de la clase concierto en el array, hacemos uso del .push para agregarlo a la última posición del array
         function registrarEvento(concierto) {
                 conciertos.push(concierto);
-                agregarConcierto();
-                console.log(conciertos);     
+                agregarConcierto();    
         }
 
         // agregarConcierto: Sirve para añadir conciertos al apartado de "Próximos conciertos"
@@ -319,26 +413,27 @@
                 <p>Descripcion: ${concierto.descripcion}</p>
                 <p>Dias Antelacion: ${concierto.DiasAntelacion}</p>
                 <p>impuestos : ${concierto.impuestos }</p>
+                <p>Ingreso Esperado : ${concierto.ingresosEsperados}</p>
+                <p>Cógido Promocional : ${concierto.codigoPromocional}</p>
                 <button class="eliminar" onclick="eliminarConcierto(${concierto.id})">Eliminar</button>
                 `; 
-
                 listaConciertos.appendChild(conciertoCont);
             });      
         }
 
-        function validarTickets(tickets, aforo) {
-            document.getElementById('tickets-error').innerHTML = "";
-            alert("Se activa la función de validar tickets");
-            console.log("se activa la función");
-            let esValido = true;
+        // function validarTickets(tickets, aforo) {
+        //     document.getElementById('tickets-error').innerHTML = "";
+        //     alert("Se activa la función de validar tickets");
+        //     console.log("se activa la función");
+        //     let esValido = true;
 
-            if (tickets > aforo) {
-                document.getElementById('tickets-error').innerHTML = "El número de tickets no puede exceder el aforo permitido";
-                esValido = false;
-            }
+        //     if (tickets > aforo) {
+        //         document.getElementById('tickets-error').innerHTML = "El número de tickets no puede exceder el aforo permitido";
+        //         esValido = false;
+        //     }
             
-            return esValido;
-        }
+        //     return esValido;
+        // }
     </script>
 </body>
 </html>
